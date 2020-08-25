@@ -21,7 +21,7 @@ spring:
   application:
     name: microservice-config-prod
 emp:
-  name: 张三
+  name: 李四
 #保存时注意，选择 UTF-8 保存
 
 
