@@ -1,0 +1,66 @@
+[1]下载上传解压
+https://archive.apache.org/dist/storm/
+#tar -zxvf /opt/softwares/apache-storm-1.1.0.tar.gz -C /opt/modules/
+#mv apache-storm-1.1.0/ storm-1.1.0
+
+[2]配置坏境变量
+#vim /etc/profile
+export STORM_HOME=/opt/modules/storm-1.1.0
+export PATH=$PATH:$STORM_HOME/bin
+#source /etc/profile
+
+[3]修改strom配置storm-env.sh
+#vim /opt/modules/storm-1.1.0/conf/storm-env.sh
+
+#export JAVA_HOME=/path/to/jdk/home
+export JAVA_HOME=/opt/modules/jdk1.8.0_11
+# export STORM_CONF_DIR=""
+export STORM_CONF_DIR="/opt/modules/storm-1.1.0/conf"
+
+[4]修改strom的配置storm.yaml
+#vim /opt/modules/storm-1.1.0/conf/storm.yaml
+
+storm.zookeeper.servers:
+ - "centos01"
+ - "centos02"
+ - "centos03"
+supervisor.slots.ports:
+ - 6700
+ - 6701
+ - 6702
+ - 6703
+storm.zookeeper.port: 2181
+storm.local.dir: "/opt/modules/stormData"
+nimbus.seeds: ["centos01"]
+
+
+[5]将storm发送到其他节点
+#scp -r storm-1.1.0/ hadoop@centos02:`pwd`
+#scp -r storm-1.1.0/ hadoop@centos03:`pwd`
+
+===============启动===================
+
+[6]启动zookeeper
+
+【1】在centos01上执行以下命令，启动Nimbus和UI服务
+
+#storm nimbus >/dev/null 2>&1 &
+
+#storm ui >/dev/null 2>&1 &
+
+【2】查看或者可以访问
+#jps
+
+http://centos01:8080
+
+
+【3】在centos02 storm中bin中启动Supervisor服务
+#./storm supervisor >/dev/null 2>&1 &
+#jps
+
+【4】同上在centos3中执行
+
+#./storm supervisor >/dev/null 2>&1 &
+
+
+
